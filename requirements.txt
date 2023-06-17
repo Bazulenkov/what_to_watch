@@ -1,0 +1,4 @@
+Flask==2.3.2
+python-dotenv==1.0.0
+Flask-WTF==1.1.1
+Flask-Migrate==4.0.4
