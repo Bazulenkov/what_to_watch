@@ -42,6 +42,8 @@ Apply migrations to the DB of the project:
 flask db upgrade
 ```
 
+Create `.env` and fill it like in `.env.example`
+
 Run the project:
 
 ```
