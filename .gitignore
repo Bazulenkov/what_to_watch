@@ -131,6 +131,4 @@ dmypy.json
 .vscode
 .idea
 
-.env
-
 *.sqlite3
