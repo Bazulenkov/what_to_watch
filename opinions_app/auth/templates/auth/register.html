@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block title %} Register {% endblock %}
+{% block content %}
+    <main>
+        <section class="container my-5">
+            <div class="row">
+                <h1>Register</h1>
+                <div class="col-12 col-lg-7 my-5">
+
+                    {{ wtf.quick_form(form) }}
+                
+                    <p class="py-3 mb-3">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {{ message }}
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+{% endblock %}

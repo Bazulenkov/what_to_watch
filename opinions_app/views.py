@@ -1,6 +1,7 @@
 from random import randrange
 
 from flask import abort, render_template, flash, redirect, url_for
+from flask_login import login_required
 
 from opinions_app import app, db
 from opinions_app.forms import OpinionForm
@@ -24,6 +25,7 @@ def index_view():
 
 
 @app.route("/add", methods=["GET", "POST"])
+@login_required
 def add_opinion_view():
     form = OpinionForm()
     if form.validate_on_submit():

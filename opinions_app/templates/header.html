@@ -17,6 +17,25 @@
                             Хочу другой фильм
                         </a>
                     </li>
+                    <li>
+                        {% if current_user.is_anonymous %}
+                            <li>
+                                <a class="nav-link"
+                                   href="{{ url_for('auth.login') }}">Login</a>
+                            </li>
+                            <li>
+                                <a class="nav-link"
+                                   href="{{ url_for('auth.register') }}">Register</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-link">
+                                {{ current_user.username }}
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                            </li>
+                        {% endif %}
+                    </li>
                 </ul>
             </div>
         </div>
