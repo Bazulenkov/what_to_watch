@@ -16,4 +16,8 @@ app.config.from_pyfile("config.py")
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from . import api_views, cli_commands, error_handlers, views
+from .errors import bp as errors_bp
+
+app.register_blueprint(errors_bp)
+
+from . import api_views, cli_commands, views

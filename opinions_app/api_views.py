@@ -1,7 +1,7 @@
 from flask import jsonify, request
 
+from opinions_app.errors.error_handlers import InvalidAPIUsage
 from . import app, db
-from .error_handlers import InvalidAPIUsage
 from .models import Opinion
 from .views import random_opinion
 
@@ -18,8 +18,8 @@ def get_opinion(id):
 def update_opinion(id):
     data = request.get_json()
     if (
-        "text" in data
-        and Opinion.query.filter_by(text=data["text"]).first() is not None
+            "text" in data
+            and Opinion.query.filter_by(text=data["text"]).first() is not None
     ):
         raise InvalidAPIUsage("Такое мнение уже есть в базе данных")
     opinion = Opinion.query.get(id)
