@@ -5,6 +5,8 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
+from config import Config
+
 # from settings import Config
 
 metadata = MetaData(
@@ -17,23 +19,33 @@ metadata = MetaData(
     }
 )
 
-app = Flask(__name__, instance_relative_config=True)
-# Load the default configuration
-app.config.from_object("config.Config")
-
-# Load the configuration from the instance folder
-app.config.from_pyfile("config.py")
-
-bootstrap = Bootstrap(app)
-db = SQLAlchemy(app, metadata=metadata)
-migrate = Migrate(app, db)
-login = LoginManager(app)
+db = SQLAlchemy(metadata=metadata)
+migrate = Migrate()
+login = LoginManager()
 login.login_view = "auth.login"
 login.login_message = "Please log in to access this page"
+bootstrap = Bootstrap()
 
-from . import auth, errors
 
-app.register_blueprint(errors.bp)
-app.register_blueprint(auth.bp)
+def create_app(config_class=Config):
+    app = Flask(__name__, instance_relative_config=True)
+    # Load the default configuration
+    app.config.from_object(config_class)
 
-from . import api_views, cli_commands, views  # noqa
+    # Load the configuration from the instance folder
+    app.config.from_pyfile("config.py")
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login.init_app(app)
+    bootstrap.init_app(app)
+
+    from . import auth, errors  # noqa
+
+    app.register_blueprint(errors.bp)
+    app.register_blueprint(auth.bp)
+
+    with app.app_context():
+        from . import api_views, cli_commands, views  # noqa
+
+    return app

@@ -1,9 +1,9 @@
 from random import randrange
 
-from flask import abort, render_template, flash, redirect, url_for
+from flask import abort, render_template, flash, redirect, url_for, current_app
 from flask_login import login_required
 
-from opinions_app import app, db
+from opinions_app import db
 from opinions_app.forms import OpinionForm
 from opinions_app.models import Opinion
 
@@ -16,7 +16,7 @@ def random_opinion():
         return opinion
 
 
-@app.route("/")
+@current_app.route("/")
 def index_view():
     opinion = random_opinion()
     if opinion is not None:
@@ -24,7 +24,7 @@ def index_view():
     abort(404)
 
 
-@app.route("/add", methods=["GET", "POST"])
+@current_app.route("/add", methods=["GET", "POST"])
 @login_required
 def add_opinion_view():
     form = OpinionForm()
@@ -48,7 +48,7 @@ def add_opinion_view():
     return render_template("add_opinion.html", form=form)
 
 
-@app.route("/opinions/<int:id>")
+@current_app.route("/opinions/<int:id>")
 def opinion_view(id):
     opinion = Opinion.query.get_or_404(id)
     return render_template("opinion.html", opinion=opinion)
