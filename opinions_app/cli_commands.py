@@ -1,12 +1,13 @@
 import csv
 
 import click
+from flask import current_app
 
-from opinions_app import app, db
+from opinions_app import db
 from opinions_app.models import Opinion
 
 
-@app.cli.command("load_opinions")
+@current_app.cli.command("load_opinions")
 def load_opinions_command():
     """Функция загрузки мнений в базу данных."""
     with open("opinions.csv", encoding="utf-8") as f:

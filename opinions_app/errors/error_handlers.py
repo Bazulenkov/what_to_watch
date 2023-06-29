@@ -1,6 +1,7 @@
 from flask import render_template, jsonify
 
-from opinions_app import app, db
+from opinions_app import db
+from opinions_app.errors import bp
 
 
 class InvalidAPIUsage(Exception):
@@ -23,20 +24,20 @@ class InvalidAPIUsage(Exception):
 
 
 # Обработчик кастомного исключения для API
-@app.errorhandler(InvalidAPIUsage)
+@bp.app_errorhandler(InvalidAPIUsage)
 def invalid_api_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
 
-@app.errorhandler(404)
+@bp.app_errorhandler(404)
 def page_not_found(error):
     # В качестве ответа возвращается собственный шаблон
     # и код ошибки
-    return render_template("404.html"), 404
+    return render_template("errors/404.html"), 404
 
 
-@app.errorhandler(500)
+@bp.app_errorhandler(500)
 def internal_error(error):
     # В таких случаях можно откатить незафиксированные изменения в БД
     db.session.rollback()
-    return render_template("500.html"), 500
+    return render_template("errors/500.html"), 500
