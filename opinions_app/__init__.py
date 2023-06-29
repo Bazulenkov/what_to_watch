@@ -33,14 +33,17 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     # Load the configuration from the instance folder
-    app.config.from_pyfile("config.py")
+    try:
+        app.config.from_pyfile("config.py")
+    except:
+        pass
 
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
     bootstrap.init_app(app)
 
-    from . import auth, errors  # noqa
+    from . import auth, errors
 
     app.register_blueprint(errors.bp)
     app.register_blueprint(auth.bp)
