@@ -43,12 +43,12 @@ def create_app(config_class=Config):
     login.init_app(app)
     bootstrap.init_app(app)
 
-    from . import auth, errors
-
-    app.register_blueprint(errors.bp)
-    app.register_blueprint(auth.bp)
-
     with app.app_context():
+        from . import auth, errors
+
+        app.register_blueprint(errors.bp)
+        app.register_blueprint(auth.bp)
+
         from . import api_views, cli_commands, views  # noqa
 
     return app

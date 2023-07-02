@@ -8,8 +8,8 @@
                 <h1>Register</h1>
                 <div class="col-12 col-lg-7 my-5">
 
-                    {{ wtf.quick_form(form) }}
-                
+                    {{ wtf.quick_form(form, enctype="multipart/form-data") }}
+
                     <p class="py-3 mb-3">
                         {% with messages = get_flashed_messages() %}
                             {% if messages %}

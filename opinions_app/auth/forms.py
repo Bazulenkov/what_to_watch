@@ -1,8 +1,12 @@
+from flask import current_app
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from flask_wtf.file import FileAllowed, FileSize
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
 from .models import User
+
+IMAGES = set("jpg jpe jpeg png gif svg bmp".split())
 
 
 class LoginForm(FlaskForm):
@@ -18,6 +22,13 @@ class RegistrationForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
     password2 = PasswordField(
         "Repeat Password", validators=[DataRequired(), EqualTo("password")]
+    )
+    avatar = FileField(
+        "Avatar",
+        validators=[
+            FileAllowed(IMAGES, "Images only!"),
+            FileSize(current_app.config["MAX_CONTENT_LENGTH"]),
+        ],
     )
     submit = SubmitField("Register")
 

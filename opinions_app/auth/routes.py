@@ -1,7 +1,9 @@
+import os
 from urllib.parse import urlsplit
 
-from flask import request, redirect, url_for, flash, render_template
+from flask import request, redirect, url_for, flash, render_template, current_app
 from flask_login import current_user, login_user, logout_user
+from werkzeug.utils import secure_filename
 
 from opinions_app import db
 from . import bp
@@ -17,6 +19,16 @@ def register():
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
+        f = form.avatar.data
+        filename = secure_filename(f.filename)
+        f.save(
+            os.path.join(
+                current_app.instance_path,
+                current_app.config["UPLOADS_FOLDER"],
+                filename,
+            )
+        )
+        user.avatar = filename
         db.session.add(user)
         db.session.commit()
         flash("Congratulations, you are now a registered user!")
